@@ -25,6 +25,7 @@ npm run dev
 
 1. สร้าง Supabase project ผ่าน Vercel Marketplace หรือที่ Supabase โดยตรง
 2. เปิด Supabase SQL Editor แล้วรันไฟล์ `supabase/schema.sql`
+   - หรือใช้ Supabase CLI แล้ว push migration `supabase/migrations/20260501000000_initial_mango_store.sql`
 3. คัดลอก `.env.example` เป็น `.env.local`
 4. เติมค่า:
 
@@ -33,6 +34,8 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
+
+ถ้า deploy ผ่าน Vercel ให้ใส่ค่าเดียวกันนี้ใน Project Settings > Environment Variables หรือให้ Vercel Marketplace sync จาก Supabase integration
 
 ## สร้างแอดมินคนแรก
 
