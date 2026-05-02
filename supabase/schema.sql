@@ -86,18 +86,14 @@ alter table public.products enable row level security;
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 
-drop policy if exists "admins can read profiles" on public.profiles;
-create policy "admins can read profiles"
+drop policy if exists "users can read own profile" on public.profiles;
+create policy "users can read own profile"
 on public.profiles for select
 to authenticated
-using (public.is_admin());
+using (id = auth.uid());
 
+drop policy if exists "admins can read profiles" on public.profiles;
 drop policy if exists "owners can manage profiles" on public.profiles;
-create policy "owners can manage profiles"
-on public.profiles for all
-to authenticated
-using (exists (select 1 from public.profiles where id = auth.uid() and role = 'owner'))
-with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'owner'));
 
 drop policy if exists "public can read active products" on public.products;
 create policy "public can read active products"

@@ -4,6 +4,18 @@ import { supabase } from "@/lib/supabase";
 import { LogIn } from "lucide-react";
 import { FormEvent, useState } from "react";
 
+function getLoginMessage(message: string) {
+  if (message.toLowerCase().includes("invalid login credentials")) {
+    return "อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจรหัสผ่านใน Supabase Auth หรือ reset password ใหม่";
+  }
+
+  if (message.toLowerCase().includes("email not confirmed")) {
+    return "บัญชียังไม่ได้ยืนยันอีเมล กรุณาเปิด Auto Confirm User หรือยืนยันอีเมลก่อน";
+  }
+
+  return message;
+}
+
 export default function AdminLoginPage() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +38,7 @@ export default function AdminLoginPage() {
     setIsLoading(false);
 
     if (error) {
-      setMessage(error.message);
+      setMessage(getLoginMessage(error.message));
       return;
     }
 
@@ -45,7 +57,11 @@ export default function AdminLoginPage() {
           <span className="label">รหัสผ่าน</span>
           <input name="password" type="password" required className="field" />
         </label>
-        <button className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-leaf px-4 font-semibold text-white">
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-leaf px-4 font-semibold text-white disabled:opacity-60"
+        >
           <LogIn size={18} />
           {isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
         </button>
