@@ -46,7 +46,7 @@ export default function SelectionPage() {
   }, []);
 
   return (
-    <main className="bg-[#fffdf6]">
+    <main className="bg-[#fffaf0]">
       <section className="bg-leaf px-4 py-14 text-white">
         <div className="mx-auto max-w-7xl">
           <p className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-sm font-semibold text-cream">

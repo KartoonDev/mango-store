@@ -52,7 +52,7 @@ const fallbackPrices: ExportPrice[] = [
 
 const statusStyles: Record<ExportPriceStatus, string> = {
   open: "bg-leaf text-white",
-  pending: "bg-cream text-stone-800",
+  pending: "bg-mango text-stone-950",
   closed: "bg-stone-200 text-stone-600"
 };
 
@@ -148,7 +148,7 @@ export default function ExportPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fffdf6] text-stone-900">
+    <main className="min-h-screen bg-[#fffaf0] text-stone-900">
       <section className="bg-leaf text-white">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-[1fr_0.9fr] md:items-center md:py-16">
           <div>
@@ -208,7 +208,7 @@ export default function ExportPage() {
         </div>
 
         <div className="mt-7 overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <div className="hidden grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr_0.8fr] bg-[#f2edc2] px-4 py-3 text-sm font-bold text-stone-800 md:grid">
+          <div className="hidden grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr_0.8fr] bg-cream px-4 py-3 text-sm font-bold text-stone-800 md:grid">
             <span>พันธุ์ / เกรด</span>
             <span>ขนาด</span>
             <span>ปลายทาง</span>
@@ -240,7 +240,7 @@ export default function ExportPage() {
         </div>
       </section>
 
-      <section className="bg-[#f2edc2]/55 py-12">
+      <section className="bg-cream/55 py-12">
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center">
             <h2 className="text-3xl font-black text-stone-950">มาตรฐานที่ช่วยให้ขายส่งออกได้ดีขึ้น</h2>
@@ -256,7 +256,7 @@ export default function ExportPage() {
               [PackageCheck, "การคัดและแพ็ก", "พร้อมคัดเกรดก่อนส่งเข้าจุดรวบรวม"]
             ].map(([Icon, title, text]) => (
               <article key={String(title)} className="rounded-lg border border-leaf/10 bg-white p-5 shadow-sm">
-                <span className="grid h-11 w-11 place-items-center rounded-md bg-[#9fcb98]/35 text-leaf">
+                <span className="grid h-11 w-11 place-items-center rounded-md bg-grove/15 text-leaf">
                   <Icon size={21} />
                 </span>
                 <h3 className="mt-4 font-bold text-stone-950">{title as string}</h3>

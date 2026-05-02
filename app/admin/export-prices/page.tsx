@@ -37,7 +37,8 @@ export default function AdminExportPricesPage() {
       return;
     }
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const { error } = await supabase.from("export_prices").insert({
       variety: String(formData.get("variety")),
       grade: String(formData.get("grade")),
@@ -57,7 +58,7 @@ export default function AdminExportPricesPage() {
       return;
     }
 
-    event.currentTarget.reset();
+    form.reset();
     setMessage("เพิ่มราคาส่งออกแล้ว");
     loadPrices();
   }

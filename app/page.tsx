@@ -94,7 +94,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="bg-[#fffdf2]">
+    <main className="bg-[#fffaf0]">
       <section className="relative overflow-hidden bg-leaf text-white">
         <img
           src={content.hero_image_url}
@@ -197,7 +197,7 @@ export default function HomePage() {
             {giftingMoments.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className="rounded-lg border border-stone-200 bg-[#fbf9e9] p-4 text-center">
+                <div key={item.title} className="rounded-lg border border-stone-200 bg-[#fffaf0] p-4 text-center">
                   <Icon className="mx-auto text-leaf" size={26} />
                   <p className="mt-3 font-bold text-stone-950">{item.title}</p>
                   <p className="text-xs text-stone-500">{item.label}</p>

@@ -44,7 +44,8 @@ export default function CheckoutPage() {
       return;
     }
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const slip = formData.get("slip") as File | null;
     setIsSubmitting(true);
 
@@ -90,7 +91,7 @@ export default function CheckoutPage() {
 
       if (itemError) throw itemError;
       clearCart();
-      event.currentTarget.reset();
+      form.reset();
       setMessage("ส่งออเดอร์สำเร็จแล้ว เจ้าของสวนจะตรวจสลิปและติดต่อกลับ");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "ส่งออเดอร์ไม่สำเร็จ");
@@ -220,11 +221,11 @@ export default function CheckoutPage() {
             <textarea name="note" rows={2} className="field" />
           </label>
           <button
-            disabled={isSubmitting || !settings.accept_orders}
+            disabled={isSubmitting || !settings.accept_orders || items.length === 0}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-mango px-4 font-bold text-stone-950 hover:bg-yellow-400 disabled:opacity-60"
           >
             <Send size={18} />
-            {isSubmitting ? "กำลังส่ง..." : "ส่งออเดอร์"}
+            {isSubmitting ? "กำลังส่ง..." : items.length === 0 ? "เลือกสินค้าก่อน" : "ส่งออเดอร์"}
           </button>
           {message && <p className="rounded-md bg-stone-100 p-3 text-sm text-stone-700">{message}</p>}
         </form>

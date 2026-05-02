@@ -276,6 +276,10 @@ insert into storage.buckets (id, name, public)
 values ('farmer-photos', 'farmer-photos', true)
 on conflict (id) do update set public = excluded.public;
 
+insert into storage.buckets (id, name, public)
+values ('product-images', 'product-images', true)
+on conflict (id) do update set public = excluded.public;
+
 drop policy if exists "public can upload payment slips" on storage.objects;
 create policy "public can upload payment slips"
 on storage.objects for insert
@@ -299,6 +303,18 @@ create policy "public can view farmer photos"
 on storage.objects for select
 to anon, authenticated
 using (bucket_id = 'farmer-photos');
+
+drop policy if exists "admins can upload product images" on storage.objects;
+create policy "admins can upload product images"
+on storage.objects for insert
+to authenticated
+with check (bucket_id = 'product-images' and public.is_admin());
+
+drop policy if exists "public can view product images" on storage.objects;
+create policy "public can view product images"
+on storage.objects for select
+to anon, authenticated
+using (bucket_id = 'product-images');
 
 insert into public.products (name, description, price, unit, stock, image_url, is_active)
 values

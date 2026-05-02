@@ -1,5 +1,5 @@
+import { AppChrome } from "@/components/AppChrome";
 import { CartProvider } from "@/components/CartProvider";
-import { Header } from "@/components/Header";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -13,8 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="th">
       <body>
         <CartProvider>
-          <Header />
-          {children}
+          <AppChrome>{children}</AppChrome>
         </CartProvider>
       </body>
     </html>

@@ -10,7 +10,7 @@ const storyCards = [
 
 export default function StoryPage() {
   return (
-    <main className="bg-[#fffdf6]">
+    <main className="bg-[#fffaf0]">
       <section className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <p className="text-sm font-semibold text-grove">From the Farm to Your Table</p>
@@ -41,13 +41,13 @@ export default function StoryPage() {
         </div>
       </section>
 
-      <section className="bg-[#f2edc2]/55 px-4 py-12">
+      <section className="bg-cream/55 px-4 py-12">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
           {storyCards.map((card) => {
             const Icon = card.icon;
             return (
               <article key={card.title} className="rounded-lg border border-leaf/10 bg-white p-5 shadow-sm">
-                <span className="grid h-11 w-11 place-items-center rounded-md bg-[#9fcb98]/35 text-leaf">
+                <span className="grid h-11 w-11 place-items-center rounded-md bg-grove/15 text-leaf">
                   <Icon size={21} />
                 </span>
                 <h2 className="mt-4 font-bold text-stone-950">{card.title}</h2>

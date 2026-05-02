@@ -79,7 +79,7 @@ export default function AdminSettingsPage() {
       )}
 
       <form onSubmit={handleSubmit} className="mt-5 grid gap-4">
-        <label className="flex items-center gap-3 rounded-md border border-stone-200 bg-[#fbf9e9] p-4">
+        <label className="flex items-center gap-3 rounded-md border border-stone-200 bg-[#fffaf0] p-4">
           <input name="accept_orders" type="checkbox" defaultChecked={settings.accept_orders} />
           <span>
             <span className="block font-semibold text-stone-950">เปิดรับออเดอร์</span>

@@ -24,7 +24,7 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
         <Link href="/" className="flex min-w-0 items-center gap-3">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full border-2 border-cream bg-white shadow-soft">
-            <span className="grid h-11 w-11 place-items-center rounded-full border border-leaf/20 bg-[#fbf9e9] text-center text-[8px] font-bold leading-tight text-leaf">
+            <span className="grid h-11 w-11 place-items-center rounded-full border border-leaf/20 bg-[#fffaf0] text-center text-[8px] font-bold leading-tight text-leaf">
               สวนมะม่วง<br />น้ำดอกไม้
             </span>
           </span>
@@ -34,7 +34,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center justify-center gap-1 rounded-full border border-leaf/10 bg-[#fbf9e9] p-1 text-sm font-bold text-stone-700 lg:flex">
+        <nav className="hidden items-center justify-center gap-1 rounded-full border border-leaf/10 bg-[#fffaf0] p-1 text-sm font-bold text-stone-700 lg:flex">
           {navItems.map((item) => {
             const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
@@ -81,7 +81,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               className={`shrink-0 rounded-full px-3 py-2 transition ${
-                isActive ? "bg-leaf text-white" : "bg-[#fbf9e9] hover:text-leaf"
+                isActive ? "bg-leaf text-white" : "bg-[#fffaf0] hover:text-leaf"
               }`}
             >
               {item.label}

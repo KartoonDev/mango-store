@@ -63,7 +63,7 @@ export default function AdminFarmerPartnersPage() {
                 ปริมาณ {partner.volume_kg ? `${Number(partner.volume_kg).toLocaleString("th-TH")} กก.` : "ยังไม่ระบุ"} · เก็บเกี่ยว{" "}
                 {partner.harvest_window}
               </p>
-              <p className="mt-2 inline-flex rounded-full bg-[#9fcb98]/35 px-3 py-1 text-xs font-bold text-leaf">
+              <p className="mt-2 inline-flex rounded-full bg-grove/15 px-3 py-1 text-xs font-bold text-leaf">
                 {partner.has_gap ? "มี GAP / ใบรับรอง" : "ยังไม่มี GAP"}
               </p>
               {partner.certification_note && <p className="mt-3 text-sm text-stone-600">{partner.certification_note}</p>}

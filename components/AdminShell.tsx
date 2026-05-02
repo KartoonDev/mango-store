@@ -2,7 +2,7 @@
 
 import { AdminNav } from "@/components/AdminNav";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
-import { LogOut, Sprout } from "lucide-react";
+import { LogOut, Sprout, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -76,7 +76,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     }
 
     checkAdmin();
-  }, [isLoginPage, pathname]);
+  }, [isLoginPage]);
 
   async function signOut() {
     await supabase?.auth.signOut();
@@ -84,12 +84,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   if (isLoginPage) {
-    return <main className="min-h-screen bg-[#fbf9e9] px-4 py-10">{children}</main>;
+    return <main className="min-h-screen bg-[#fffaf0] px-4 py-10">{children}</main>;
   }
 
   if (isChecking || !isAllowed) {
     return (
-      <main className="grid min-h-screen place-items-center bg-[#fbf9e9] px-4 py-10">
+      <main className="grid min-h-screen place-items-center bg-[#fffaf0] px-4 py-10">
         <div className="w-full max-w-md rounded-lg border border-stone-200 bg-white p-6 text-sm text-stone-600 shadow-sm">
           <div className="flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-md bg-cream text-leaf">
@@ -114,7 +114,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <main className="min-h-screen bg-[#fbf9e9] lg:grid lg:grid-cols-[280px_1fr]">
+    <main className="min-h-screen bg-[#fffaf0] lg:grid lg:grid-cols-[280px_1fr]">
       <aside className="bg-leaf px-4 py-5 text-white lg:sticky lg:top-0 lg:h-screen">
         <div className="flex items-center gap-3 rounded-lg bg-white/10 p-3">
           <span className="grid h-11 w-11 place-items-center rounded-md bg-cream text-leaf">
@@ -139,12 +139,20 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <section className="min-w-0 px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           {email && (
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-stone-200 bg-white p-3 text-sm">
-              <span className="text-stone-600">เข้าสู่ระบบเป็น {email}</span>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm shadow-sm">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-cream text-leaf">
+                  <UserCircle size={19} />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-stone-400">Admin</p>
+                  <p className="truncate font-bold text-stone-800">{email}</p>
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={signOut}
-                className="inline-flex h-9 items-center gap-2 rounded-md border border-stone-200 px-3 font-semibold hover:bg-stone-100"
+                className="inline-flex h-9 items-center gap-2 rounded-md border border-stone-200 px-3 font-semibold text-stone-700 hover:bg-stone-100"
               >
                 <LogOut size={15} />
                 ออกจากระบบ

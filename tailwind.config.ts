@@ -5,12 +5,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        leaf: "#346739",
-        grove: "#79ae6f",
-        mint: "#9fcb98",
-        cream: "#f2edc2",
-        bark: "#29442c",
-        mango: "#f2edc2"
+        leaf: "#237227",
+        grove: "#519a66",
+        mint: "#ffd786",
+        cream: "#ffd786",
+        bark: "#174f1c",
+        mango: "#ffaa00"
       },
       boxShadow: {
         soft: "0 18px 50px rgba(31, 41, 55, 0.12)"

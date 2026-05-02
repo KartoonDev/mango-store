@@ -9,7 +9,7 @@ const moments = [
 
 export default function GiftingPage() {
   return (
-    <main className="bg-[#fffdf6]">
+    <main className="bg-[#fffaf0]">
       <section className="grid bg-leaf text-white lg:grid-cols-2">
         <div className="min-h-[420px]">
           <img

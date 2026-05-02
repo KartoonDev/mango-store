@@ -21,7 +21,7 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <main className="bg-[#fffdf6]">
+    <main className="bg-[#fffaf0]">
       <section className="bg-leaf px-4 py-14 text-white">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-semibold text-cream">Contact Us</p>
