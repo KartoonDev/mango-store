@@ -47,6 +47,27 @@ create table if not exists public.order_items (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.site_content (
+  key text primary key,
+  value text not null default '',
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.store_settings (
+  id text primary key default 'default',
+  accept_orders boolean not null default true,
+  announcement text not null default '',
+  pickup_note text not null default '',
+  contact_phone text not null default '',
+  contact_line text not null default '',
+  contact_facebook text not null default '',
+  bank_account_name text not null default '',
+  bank_account_number text not null default '',
+  bank_name text not null default '',
+  qr_image_url text not null default '',
+  updated_at timestamptz not null default now()
+);
+
 create or replace function public.touch_updated_at()
 returns trigger
 language plpgsql
@@ -67,6 +88,16 @@ create trigger orders_touch_updated_at
 before update on public.orders
 for each row execute function public.touch_updated_at();
 
+drop trigger if exists site_content_touch_updated_at on public.site_content;
+create trigger site_content_touch_updated_at
+before update on public.site_content
+for each row execute function public.touch_updated_at();
+
+drop trigger if exists store_settings_touch_updated_at on public.store_settings;
+create trigger store_settings_touch_updated_at
+before update on public.store_settings
+for each row execute function public.touch_updated_at();
+
 create or replace function public.is_admin()
 returns boolean
 language sql
@@ -85,6 +116,8 @@ alter table public.profiles enable row level security;
 alter table public.products enable row level security;
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
+alter table public.site_content enable row level security;
+alter table public.store_settings enable row level security;
 
 drop policy if exists "users can read own profile" on public.profiles;
 create policy "users can read own profile"
@@ -133,6 +166,32 @@ on public.order_items for select
 to authenticated
 using (public.is_admin());
 
+drop policy if exists "public can read site content" on public.site_content;
+create policy "public can read site content"
+on public.site_content for select
+to anon, authenticated
+using (true);
+
+drop policy if exists "admins can manage site content" on public.site_content;
+create policy "admins can manage site content"
+on public.site_content for all
+to authenticated
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "public can read store settings" on public.store_settings;
+create policy "public can read store settings"
+on public.store_settings for select
+to anon, authenticated
+using (true);
+
+drop policy if exists "admins can manage store settings" on public.store_settings;
+create policy "admins can manage store settings"
+on public.store_settings for all
+to authenticated
+using (public.is_admin())
+with check (public.is_admin());
+
 insert into storage.buckets (id, name, public)
 values ('payment-slips', 'payment-slips', true)
 on conflict (id) do update set public = excluded.public;
@@ -170,3 +229,28 @@ values
     true
   )
 on conflict do nothing;
+
+insert into public.site_content (key, value)
+values
+  ('hero_badge', 'เก็บสดจากสวนตามรอบตัด'),
+  ('hero_title', 'สวนมะม่วงน้ำดอกไม้'),
+  ('hero_subtitle', 'สั่งมะม่วงคัดเกรด เลือกวันรับเองหรือนัดส่ง พร้อมแนบสลิปโอนเงินในระบบเดียว'),
+  ('hero_image_url', 'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1800&q=80'),
+  ('products_heading', 'สินค้าในสวน'),
+  ('products_note', 'มะม่วงสดจากสวน คัดเกรดตามรอบตัด'),
+  ('promo_text', 'รับเอง / นัดส่งตามวันที่เลือก')
+on conflict (key) do nothing;
+
+insert into public.store_settings (
+  id,
+  accept_orders,
+  announcement,
+  pickup_note
+)
+values (
+  'default',
+  true,
+  'เปิดรับออเดอร์มะม่วงน้ำดอกไม้ตามรอบตัดประจำสัปดาห์',
+  'รับเองที่สวนหรือนัดส่งตามวันที่เลือก'
+)
+on conflict (id) do nothing;

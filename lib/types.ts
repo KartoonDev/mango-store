@@ -46,3 +46,9 @@ export type OrderItem = {
   unit_price: number;
   line_total: number;
 };
+
+export type SiteContentRow = {
+  key: string;
+  value: string;
+  updated_at?: string;
+};

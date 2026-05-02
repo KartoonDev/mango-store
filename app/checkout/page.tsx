@@ -2,16 +2,28 @@
 
 import { useCart } from "@/components/CartProvider";
 import { defaultProductImage } from "@/lib/sample-data";
+import { defaultStoreSettings, type StoreSettings } from "@/lib/site-config";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { Minus, Plus, Send, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function CheckoutPage() {
   const { items, totalAmount, updateQuantity, removeItem, clearCart } = useCart();
   const [pickupMethod, setPickupMethod] = useState<"pickup" | "delivery">("pickup");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [settings, setSettings] = useState<StoreSettings>(defaultStoreSettings);
+
+  useEffect(() => {
+    async function loadSettings() {
+      if (!supabase) return;
+      const { data } = await supabase.from("store_settings").select("*").eq("id", "default").single();
+      if (data) setSettings({ ...defaultStoreSettings, ...(data as StoreSettings) });
+    }
+
+    loadSettings();
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,6 +36,11 @@ export default function CheckoutPage() {
 
     if (!items.length) {
       setMessage("กรุณาเลือกสินค้าอย่างน้อย 1 รายการ");
+      return;
+    }
+
+    if (!settings.accept_orders) {
+      setMessage("ร้านปิดรับออเดอร์ชั่วคราว กรุณาติดต่อเจ้าของสวน");
       return;
     }
 
@@ -151,6 +168,9 @@ export default function CheckoutPage() {
             โหมดเดโม: ตั้งค่า Supabase ใน `.env.local` เพื่อส่งออเดอร์จริง
           </p>
         )}
+        {!settings.accept_orders && (
+          <p className="mt-2 rounded-md bg-red-50 p-3 text-sm text-red-800">ร้านปิดรับออเดอร์ชั่วคราว</p>
+        )}
         <form onSubmit={handleSubmit} className="mt-5 grid gap-4">
           <label className="grid gap-1">
             <span className="label">ชื่อผู้สั่งซื้อ</span>
@@ -200,7 +220,7 @@ export default function CheckoutPage() {
             <textarea name="note" rows={2} className="field" />
           </label>
           <button
-            disabled={isSubmitting}
+            disabled={isSubmitting || !settings.accept_orders}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-mango px-4 font-bold text-stone-950 hover:bg-yellow-400 disabled:opacity-60"
           >
             <Send size={18} />
