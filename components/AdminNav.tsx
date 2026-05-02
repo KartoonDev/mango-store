@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, Boxes, ClipboardList, Home, LayoutPanelLeft, Settings } from "lucide-react";
+import { BarChart3, Boxes, ClipboardList, Handshake, Home, LayoutPanelLeft, Settings, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,6 +9,8 @@ const items = [
   { href: "/admin/products", label: "สินค้า", icon: Boxes },
   { href: "/admin/orders", label: "ออเดอร์", icon: ClipboardList },
   { href: "/admin/sales", label: "ยอดขาย", icon: BarChart3 },
+  { href: "/admin/export-prices", label: "ราคาส่งออก", icon: TrendingUp },
+  { href: "/admin/farmer-partners", label: "คู่ค้าชาวสวน", icon: Handshake },
   { href: "/admin/content", label: "จัดการหน้าเว็บ", icon: LayoutPanelLeft },
   { href: "/admin/settings", label: "ตั้งค่าร้าน", icon: Settings }
 ];

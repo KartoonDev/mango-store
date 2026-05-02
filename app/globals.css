@@ -30,3 +30,11 @@ textarea {
 .label {
   @apply text-sm font-semibold text-stone-700;
 }
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

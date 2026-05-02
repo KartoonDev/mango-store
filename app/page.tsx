@@ -115,7 +115,7 @@ export default function HomePage() {
             <p className="mt-3 text-xl font-semibold text-cream">{content.hero_title}</p>
             <p className="mt-4 max-w-xl text-lg text-white/90">{content.hero_subtitle}</p>
             <a
-              href="#selection"
+              href="/selection"
               className="mt-6 inline-flex h-11 items-center rounded-full bg-cream px-6 text-sm font-bold text-leaf shadow-soft hover:bg-white"
             >
               Shop Now / สั่งเลย
@@ -216,7 +216,7 @@ export default function HomePage() {
             เราคัดมะม่วงตามรอบตัดจริง ดูแลความสุก แพ็กอย่างระมัดระวัง และจัดการออเดอร์ผ่านระบบหลังบ้าน เพื่อให้ทุกกล่องส่งถึงลูกค้าอย่างเป็นระเบียบ
           </p>
           <a
-            href="#selection"
+            href="/selection"
             className="mt-6 inline-flex h-10 items-center rounded-full bg-leaf px-5 text-sm font-semibold text-white hover:bg-bark"
           >
             เลือกสินค้า
