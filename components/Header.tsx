@@ -4,6 +4,7 @@ import { useCart } from "@/components/CartProvider";
 import { LayoutDashboard, ShoppingBasket, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -17,6 +18,18 @@ const navItems = [
 export function Header() {
   const { totalItems } = useCart();
   const pathname = usePathname();
+  const previousTotalItems = useRef(totalItems);
+  const [isCartBumping, setIsCartBumping] = useState(false);
+
+  useEffect(() => {
+    if (totalItems > previousTotalItems.current) {
+      setIsCartBumping(true);
+      const timer = setTimeout(() => setIsCartBumping(false), 520);
+      previousTotalItems.current = totalItems;
+      return () => clearTimeout(timer);
+    }
+    previousTotalItems.current = totalItems;
+  }, [totalItems]);
 
   return (
     <header className="sticky top-0 z-20 border-b border-leaf/10 bg-white/95 backdrop-blur">
@@ -65,10 +78,12 @@ export function Header() {
           </span>
           <Link
             href="/checkout"
-            className="relative inline-flex h-10 items-center gap-2 rounded-md bg-leaf px-3 text-sm font-semibold text-white transition hover:bg-bark"
+            className={`relative inline-flex h-10 items-center gap-2 rounded-md bg-leaf px-3 text-sm font-semibold text-white transition hover:bg-bark ${
+              isCartBumping ? "cart-bump" : ""
+            }`}
           >
             <ShoppingBasket size={18} />
-            <span>{totalItems}</span>
+            <span className="min-w-4 text-center">{totalItems}</span>
           </Link>
         </nav>
       </div>

@@ -3,11 +3,21 @@
 import { useCart } from "@/components/CartProvider";
 import { defaultProductImage } from "@/lib/sample-data";
 import type { Product } from "@/lib/types";
-import { ShoppingCart } from "lucide-react";
+import { Check, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { useRef, useState } from "react";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function handleAddToCart() {
+    addItem(product);
+    setIsAdded(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setIsAdded(false), 1100);
+  }
 
   return (
     <article className="group overflow-hidden rounded-lg bg-white text-center shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
@@ -32,12 +42,14 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           <button
             type="button"
-            onClick={() => addItem(product)}
+            onClick={handleAddToCart}
             disabled={product.stock <= 0}
-            className="inline-flex h-9 items-center gap-2 rounded-full bg-leaf px-5 text-xs font-semibold text-white transition hover:bg-bark disabled:cursor-not-allowed disabled:bg-stone-200"
+            className={`inline-flex h-9 min-w-[92px] items-center justify-center gap-2 rounded-full px-5 text-xs font-semibold text-white transition hover:bg-bark disabled:cursor-not-allowed disabled:bg-stone-200 ${
+              isAdded ? "cart-add-pop bg-mango text-stone-950" : "bg-leaf"
+            }`}
           >
-            <ShoppingCart size={17} />
-            เพิ่ม
+            {isAdded ? <Check size={17} /> : <ShoppingCart size={17} />}
+            {isAdded ? "เพิ่มแล้ว" : "เพิ่ม"}
           </button>
         </div>
       </div>

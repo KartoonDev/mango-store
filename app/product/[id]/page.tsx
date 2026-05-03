@@ -5,10 +5,10 @@ import { Skeleton } from "@/components/Skeleton";
 import { defaultProductImage, sampleProducts } from "@/lib/sample-data";
 import { supabase } from "@/lib/supabase";
 import type { Product } from "@/lib/types";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Check, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ProductDetailPage() {
   const params = useParams<{ id: string }>();
@@ -17,6 +17,8 @@ export default function ProductDetailPage() {
     sampleProducts.find((item) => item.id === params.id) || null
   );
   const [isLoading, setIsLoading] = useState(Boolean(supabase));
+  const [isAdded, setIsAdded] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     async function loadProduct() {
@@ -31,6 +33,13 @@ export default function ProductDetailPage() {
 
     loadProduct();
   }, [params.id]);
+
+  function handleAddToCart(productToAdd: Product) {
+    addItem(productToAdd);
+    setIsAdded(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setIsAdded(false), 1200);
+  }
 
   if (isLoading) {
     return (
@@ -85,11 +94,13 @@ export default function ProductDetailPage() {
             </p>
             <button
               type="button"
-              onClick={() => addItem(product)}
-              className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-mango px-4 font-bold text-stone-950 hover:bg-yellow-400"
+              onClick={() => handleAddToCart(product)}
+              className={`mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-4 font-bold transition ${
+                isAdded ? "cart-add-pop bg-leaf text-white" : "bg-mango text-stone-950 hover:bg-yellow-400"
+              }`}
             >
-              <ShoppingCart size={18} />
-              เพิ่มลงตะกร้า
+              {isAdded ? <Check size={18} /> : <ShoppingCart size={18} />}
+              {isAdded ? "เพิ่มลงตะกร้าแล้ว" : "เพิ่มลงตะกร้า"}
             </button>
           </div>
         </div>

@@ -38,3 +38,53 @@ textarea {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+.cart-add-pop {
+  animation: cart-add-pop 520ms ease-out;
+}
+
+.cart-bump {
+  animation: cart-bump 520ms ease-out;
+}
+
+.cart-toast {
+  animation: cart-toast-in 260ms ease-out;
+}
+
+@keyframes cart-add-pop {
+  0% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes cart-bump {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+  40% {
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 12px 24px rgb(35 114 39 / 0.24);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+}
+
+@keyframes cart-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
