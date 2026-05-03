@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductCard } from "@/components/ProductCard";
+import { ProductGridSkeleton } from "@/components/Skeleton";
 import { defaultSiteContent, defaultStoreSettings, type SiteContent, type StoreSettings } from "@/lib/site-config";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { sampleProducts } from "@/lib/sample-data";
@@ -12,10 +13,14 @@ export default function SelectionPage() {
   const [products, setProducts] = useState<Product[]>(sampleProducts);
   const [content, setContent] = useState<SiteContent>(defaultSiteContent);
   const [settings, setSettings] = useState<StoreSettings>(defaultStoreSettings);
+  const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
 
   useEffect(() => {
     async function loadProducts() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoading(false);
+        return;
+      }
 
       const [{ data: productData }, { data: contentData }, { data: settingsData }] = await Promise.all([
         supabase.from("products").select("*").eq("is_active", true).gt("stock", 0).order("created_at", { ascending: false }),
@@ -40,6 +45,7 @@ export default function SelectionPage() {
       if (settingsData) {
         setSettings({ ...defaultStoreSettings, ...(settingsData as StoreSettings) });
       }
+      setIsLoading(false);
     }
 
     loadProducts();
@@ -65,11 +71,15 @@ export default function SelectionPage() {
           <Truck size={16} />
           {settings.pickup_note || content.promo_text}
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {isLoading ? (
+          <ProductGridSkeleton />
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );

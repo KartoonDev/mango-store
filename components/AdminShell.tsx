@@ -1,6 +1,7 @@
 "use client";
 
 import { AdminNav } from "@/components/AdminNav";
+import { Skeleton } from "@/components/Skeleton";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { LogOut, Sprout, UserCircle } from "lucide-react";
 import Link from "next/link";
@@ -97,7 +98,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             </span>
             <div>
               <p className="font-bold text-stone-950">หลังบ้านสวนมะม่วง</p>
-              <p className="text-stone-500">{isChecking ? "กำลังตรวจสอบสิทธิ์ผู้ดูแล..." : message}</p>
+              {isChecking ? <Skeleton className="mt-2 h-4 w-48" /> : <p className="text-stone-500">{message}</p>}
             </div>
           </div>
           {!isChecking && (

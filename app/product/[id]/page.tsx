@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/components/CartProvider";
+import { Skeleton } from "@/components/Skeleton";
 import { defaultProductImage, sampleProducts } from "@/lib/sample-data";
 import { supabase } from "@/lib/supabase";
 import type { Product } from "@/lib/types";
@@ -15,16 +16,43 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(
     sampleProducts.find((item) => item.id === params.id) || null
   );
+  const [isLoading, setIsLoading] = useState(Boolean(supabase));
 
   useEffect(() => {
     async function loadProduct() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoading(false);
+        return;
+      }
       const { data } = await supabase.from("products").select("*").eq("id", params.id).single();
       if (data) setProduct(data as Product);
+      setIsLoading(false);
     }
 
     loadProduct();
   }, [params.id]);
+
+  if (isLoading) {
+    return (
+      <main className="mx-auto max-w-6xl px-4 py-10">
+        <Skeleton className="mb-6 h-5 w-32" />
+        <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <Skeleton className="h-[420px] w-full" />
+          <div className="flex flex-col justify-center">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="mt-4 h-9 w-3/4" />
+            <Skeleton className="mt-4 h-4 w-full" />
+            <Skeleton className="mt-2 h-4 w-5/6" />
+            <div className="mt-6 rounded-lg border border-stone-200 bg-white p-5">
+              <Skeleton className="h-9 w-32" />
+              <Skeleton className="mt-3 h-4 w-48" />
+              <Skeleton className="mt-5 h-12 w-full" />
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   if (!product) {
     return (

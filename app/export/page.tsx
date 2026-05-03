@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/Skeleton";
 import { supabase } from "@/lib/supabase";
 import type { ExportPrice, ExportPriceStatus } from "@/lib/types";
 import { CheckCircle2, ClipboardCheck, Leaf, PackageCheck, Phone, Scale, Send, ShieldCheck, Sprout } from "lucide-react";
@@ -66,6 +67,7 @@ export default function ExportPage() {
   const [prices, setPrices] = useState<ExportPrice[]>(fallbackPrices);
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [isLoadingPrices, setIsLoadingPrices] = useState(Boolean(supabase));
 
   const latestDate = useMemo(() => {
     const date = prices[0]?.effective_date;
@@ -74,7 +76,10 @@ export default function ExportPage() {
 
   useEffect(() => {
     async function loadPrices() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoadingPrices(false);
+        return;
+      }
       const { data, error } = await supabase
         .from("export_prices")
         .select("*")
@@ -85,6 +90,7 @@ export default function ExportPage() {
       if (!error && data && data.length > 0) {
         setPrices(data as ExportPrice[]);
       }
+      setIsLoadingPrices(false);
     }
 
     loadPrices();
@@ -216,7 +222,25 @@ export default function ExportPage() {
             <span>สถานะ</span>
             <span>วันที่</span>
           </div>
-          {prices.map((price) => (
+          {isLoadingPrices ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="grid gap-3 border-t border-stone-100 px-4 py-4 md:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr_0.8fr] md:items-center"
+              >
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-40" />
+                  <Skeleton className="h-4 w-28" />
+                </div>
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-7 w-24 rounded-full" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+            ))
+          ) : (
+          prices.map((price) => (
             <article
               key={price.id}
               className="grid gap-3 border-t border-stone-100 px-4 py-4 md:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr_0.8fr] md:items-center"
@@ -236,7 +260,8 @@ export default function ExportPage() {
               </span>
               <p className="text-sm text-stone-500">{new Date(price.effective_date).toLocaleDateString("th-TH")}</p>
             </article>
-          ))}
+          ))
+          )}
         </div>
       </section>
 

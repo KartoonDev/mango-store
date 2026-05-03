@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton, StatCardsSkeleton } from "@/components/Skeleton";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import type { Order, Product } from "@/lib/types";
 import { Boxes, ClipboardList, CircleDollarSign } from "lucide-react";
@@ -9,16 +10,21 @@ import { useEffect, useState } from "react";
 export default function AdminDashboardPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoading(false);
+        return;
+      }
       const [{ data: productData }, { data: orderData }] = await Promise.all([
         supabase.from("products").select("*"),
         supabase.from("orders").select("*").order("created_at", { ascending: false })
       ]);
       setProducts((productData || []) as Product[]);
       setOrders((orderData || []) as Order[]);
+      setIsLoading(false);
     }
 
     load();
@@ -41,6 +47,9 @@ export default function AdminDashboardPage() {
           ยังไม่ได้ตั้งค่า Supabase หลังบ้านจะแสดงข้อมูลจริงเมื่อเติมค่า `.env.local` และรัน SQL schema แล้ว
         </div>
       )}
+      {isLoading ? (
+        <StatCardsSkeleton count={3} />
+      ) : (
       <div className="grid gap-4 sm:grid-cols-3">
         {cards.map((card) => {
           const Icon = card.icon;
@@ -55,8 +64,22 @@ export default function AdminDashboardPage() {
           );
         })}
       </div>
+      )}
       <div className="rounded-lg border border-stone-200 bg-white p-5">
         <h2 className="text-xl font-bold text-stone-950">ออเดอร์ล่าสุด</h2>
+        {isLoading ? (
+          <div className="mt-4 space-y-4">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="flex items-center justify-between gap-3">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-3 w-44" />
+                </div>
+                <Skeleton className="h-5 w-20" />
+              </div>
+            ))}
+          </div>
+        ) : (
         <div className="mt-4 divide-y divide-stone-100">
           {orders.slice(0, 5).map((order) => (
             <div key={order.id} className="flex items-center justify-between gap-3 py-3 text-sm">
@@ -69,6 +92,7 @@ export default function AdminDashboardPage() {
           ))}
           {orders.length === 0 && <p className="py-4 text-sm text-stone-500">ยังไม่มีออเดอร์</p>}
         </div>
+        )}
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { FormSkeleton } from "@/components/Skeleton";
 import { defaultStoreSettings, storeSettingFields, type StoreSettings } from "@/lib/site-config";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { Save, Store } from "lucide-react";
@@ -9,15 +10,20 @@ export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<StoreSettings>(defaultStoreSettings);
   const [message, setMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadSettings() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoading(false);
+        return;
+      }
 
       const { data } = await supabase.from("store_settings").select("*").eq("id", "default").single();
       if (data) {
         setSettings({ ...defaultStoreSettings, ...(data as StoreSettings) });
       }
+      setIsLoading(false);
     }
 
     loadSettings();
@@ -65,6 +71,9 @@ export default function AdminSettingsPage() {
   }
 
   return (
+    isLoading ? (
+      <FormSkeleton />
+    ) : (
     <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
       <div>
         <p className="text-sm font-semibold text-grove">ตั้งค่าร้าน</p>
@@ -115,5 +124,6 @@ export default function AdminSettingsPage() {
         {message && <p className="rounded-md bg-stone-100 p-3 text-sm text-stone-700">{message}</p>}
       </form>
     </section>
+    )
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/Skeleton";
 import { defaultStoreSettings, type StoreSettings } from "@/lib/site-config";
 import { supabase } from "@/lib/supabase";
 import { Banknote, Facebook, Phone, Send } from "lucide-react";
@@ -7,14 +8,19 @@ import { useEffect, useState } from "react";
 
 export default function ContactPage() {
   const [settings, setSettings] = useState<StoreSettings>(defaultStoreSettings);
+  const [isLoading, setIsLoading] = useState(Boolean(supabase));
 
   useEffect(() => {
     async function loadSettings() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoading(false);
+        return;
+      }
       const { data } = await supabase.from("store_settings").select("*").eq("id", "default").single();
       if (data) {
         setSettings({ ...defaultStoreSettings, ...(data as StoreSettings) });
       }
+      setIsLoading(false);
     }
 
     loadSettings();
@@ -36,17 +42,17 @@ export default function ContactPage() {
         <article className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
           <Phone className="text-leaf" size={26} />
           <h2 className="mt-4 text-xl font-bold text-stone-950">โทรศัพท์</h2>
-          <p className="mt-2 text-stone-600">{settings.contact_phone || "เพิ่มเบอร์โทรในหลังบ้าน"}</p>
+          {isLoading ? <Skeleton className="mt-3 h-5 w-32" /> : <p className="mt-2 text-stone-600">{settings.contact_phone || "เพิ่มเบอร์โทรในหลังบ้าน"}</p>}
         </article>
         <article className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
           <Send className="text-leaf" size={26} />
           <h2 className="mt-4 text-xl font-bold text-stone-950">Line</h2>
-          <p className="mt-2 text-stone-600">{settings.contact_line || "เพิ่ม Line ในหลังบ้าน"}</p>
+          {isLoading ? <Skeleton className="mt-3 h-5 w-32" /> : <p className="mt-2 text-stone-600">{settings.contact_line || "เพิ่ม Line ในหลังบ้าน"}</p>}
         </article>
         <article className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
           <Facebook className="text-leaf" size={26} />
           <h2 className="mt-4 text-xl font-bold text-stone-950">Facebook</h2>
-          <p className="mt-2 break-words text-stone-600">{settings.contact_facebook || "เพิ่ม Facebook URL ในหลังบ้าน"}</p>
+          {isLoading ? <Skeleton className="mt-3 h-5 w-40" /> : <p className="mt-2 break-words text-stone-600">{settings.contact_facebook || "เพิ่ม Facebook URL ในหลังบ้าน"}</p>}
         </article>
       </section>
 
@@ -61,11 +67,19 @@ export default function ContactPage() {
               <p className="text-sm text-stone-500">ใช้สำหรับออเดอร์ที่แนบสลิปผ่านหน้า checkout</p>
             </div>
           </div>
+          {isLoading ? (
+            <div className="mt-5 grid gap-2 sm:grid-cols-3">
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-5 w-36" />
+            </div>
+          ) : (
           <div className="mt-5 grid gap-2 text-stone-700 sm:grid-cols-3">
             <p>{settings.bank_name || "โอนเงินและแนบสลิป"}</p>
             <p>{settings.bank_account_name || "เพิ่มชื่อบัญชีในหลังบ้าน"}</p>
             <p>{settings.bank_account_number || "เพิ่มเลขบัญชีในหลังบ้าน"}</p>
           </div>
+          )}
         </div>
       </section>
     </main>

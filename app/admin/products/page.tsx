@@ -2,6 +2,7 @@
 
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { defaultProductImage } from "@/lib/sample-data";
+import { TableSkeleton } from "@/components/Skeleton";
 import type { Product } from "@/lib/types";
 import { Edit3, Plus, Save, Trash2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
@@ -9,14 +10,19 @@ import { FormEvent, useEffect, useState } from "react";
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   async function loadProducts() {
-    if (!supabase) return;
+    if (!supabase) {
+      setIsLoading(false);
+      return;
+    }
     const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false });
     setProducts((data || []) as Product[]);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -197,6 +203,9 @@ export default function AdminProductsPage() {
 
       {message && <p className="rounded-md bg-white p-3 text-sm text-stone-700 shadow-sm">{message}</p>}
 
+      {isLoading ? (
+        <TableSkeleton columns={5} rows={6} minWidth="min-w-[900px]" />
+      ) : (
       <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="min-w-[900px] w-full text-left text-sm">
@@ -274,6 +283,7 @@ export default function AdminProductsPage() {
           )}
         </div>
       </div>
+      )}
 
       {isFormOpen && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-stone-950/45 px-4 py-6">

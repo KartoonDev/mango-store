@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductCard } from "@/components/ProductCard";
+import { ProductGridSkeleton } from "@/components/Skeleton";
 import {
   defaultSiteContent,
   defaultStoreSettings,
@@ -60,10 +61,14 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>(sampleProducts);
   const [content, setContent] = useState<SiteContent>(defaultSiteContent);
   const [settings, setSettings] = useState<StoreSettings>(defaultStoreSettings);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(isSupabaseConfigured);
 
   useEffect(() => {
     async function loadStorefront() {
-      if (!supabase) return;
+      if (!supabase) {
+        setIsLoadingProducts(false);
+        return;
+      }
 
       const [{ data: productData }, { data: contentData }, { data: settingsData }] = await Promise.all([
         supabase.from("products").select("*").eq("is_active", true).gt("stock", 0).order("created_at", { ascending: false }),
@@ -88,6 +93,7 @@ export default function HomePage() {
       if (settingsData) {
         setSettings({ ...defaultStoreSettings, ...(settingsData as StoreSettings) });
       }
+      setIsLoadingProducts(false);
     }
 
     loadStorefront();
@@ -172,11 +178,15 @@ export default function HomePage() {
             {settings.pickup_note || content.promo_text}
           </div>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {isLoadingProducts ? (
+          <ProductGridSkeleton count={3} />
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </section>
 
       <section id="gifting" className="grid bg-white lg:grid-cols-2">
