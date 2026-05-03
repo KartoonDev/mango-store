@@ -71,7 +71,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider value={value}>
       {children}
       {lastAddedProduct && (
-        <div className="pointer-events-none fixed bottom-5 left-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0">
+        <div className="pointer-events-none fixed left-1/2 top-5 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2">
           <div className="cart-toast flex items-center gap-3 rounded-lg border border-leaf/15 bg-white p-3 shadow-soft">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-grove/15 text-leaf">
               <CheckCircle2 size={22} />

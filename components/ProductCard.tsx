@@ -30,22 +30,33 @@ export function ProductCard({ product }: { product: Product }) {
       </Link>
       <div className="space-y-3 p-4">
         <div>
-          <Link href={`/product/${product.id}`} className="text-lg font-bold text-stone-950">
+          <Link
+            href={`/product/${product.id}`}
+            className="text-lg font-bold text-stone-950"
+          >
             {product.name}
           </Link>
-          <p className="mt-1 line-clamp-2 text-xs text-stone-600">{product.description}</p>
+          <p className="mt-1 line-clamp-2 text-xs text-stone-600">
+            {product.description}
+          </p>
         </div>
         <div className="grid justify-items-center gap-2">
           <div>
-            <p className="text-base font-bold text-stone-950">฿{product.price.toLocaleString("th-TH")}</p>
-            <p className="text-xs text-stone-500">ต่อ {product.unit} · เหลือ {product.stock}</p>
+            <p className="text-base font-bold text-stone-950">
+              ฿{product.price.toLocaleString("th-TH")}
+            </p>
+            <p className="text-xs text-stone-500">
+              ต่อ {product.unit} · เหลือ {product.stock}
+            </p>
           </div>
           <button
             type="button"
             onClick={handleAddToCart}
             disabled={product.stock <= 0}
-            className={`inline-flex h-9 min-w-[92px] items-center justify-center gap-2 rounded-full px-5 text-xs font-semibold text-white transition hover:bg-bark disabled:cursor-not-allowed disabled:bg-stone-200 ${
-              isAdded ? "cart-add-pop bg-mango text-stone-950" : "bg-leaf"
+            className={`inline-flex h-9 min-w-[92px] items-center justify-center gap-2 rounded-full px-5 text-xs font-semibold transition hover:bg-bark disabled:cursor-not-allowed disabled:bg-stone-200 ${
+              isAdded
+                ? "cart-add-pop border border-leaf bg-grove/15 text-leaf hover:bg-grove/15"
+                : "bg-leaf hover:bg-grove/90 text-white"
             }`}
           >
             {isAdded ? <Check size={17} /> : <ShoppingCart size={17} />}

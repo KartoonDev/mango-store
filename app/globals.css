@@ -14,13 +14,41 @@ body {
   margin: 0;
   background: #fffaf0;
   color: #1c1917;
+  font-family: var(--font-ibm-plex-sans-thai), system-ui, sans-serif;
 }
 
 button,
 input,
-select,
-textarea {
+select {
   font: inherit;
+}
+
+textarea {
+  font-family: var(--font-sarabun), var(--font-ibm-plex-sans-thai), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+nav,
+button,
+input,
+select,
+th,
+.label,
+.font-ui {
+  font-family: var(--font-ibm-plex-sans-thai), system-ui, sans-serif;
+}
+
+p,
+li,
+td,
+textarea,
+.font-reading {
+  font-family: var(--font-sarabun), var(--font-ibm-plex-sans-thai), system-ui, sans-serif;
 }
 
 .field {
@@ -81,7 +109,7 @@ textarea {
 @keyframes cart-toast-in {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.98);
+    transform: translateY(-10px) scale(0.98);
   }
   to {
     opacity: 1;

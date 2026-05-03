@@ -1,7 +1,22 @@
 import { AppChrome } from "@/components/AppChrome";
 import { CartProvider } from "@/components/CartProvider";
 import type { Metadata, Viewport } from "next";
+import { IBM_Plex_Sans_Thai, Sarabun } from "next/font/google";
 import "./globals.css";
+
+const ibmPlexSansThai = IBM_Plex_Sans_Thai({
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-ibm-plex-sans-thai",
+  display: "swap"
+});
+
+const sarabun = Sarabun({
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sarabun",
+  display: "swap"
+});
 
 export const metadata: Metadata = {
   title: "มะม่วงสุกสีทอง หวานหอม ส่งตรงจากสวน | Mango Fresh",
@@ -51,7 +66,7 @@ const productJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th">
+    <html lang="th" className={`${ibmPlexSansThai.variable} ${sarabun.variable}`}>
       <body>
         <script
           type="application/ld+json"
